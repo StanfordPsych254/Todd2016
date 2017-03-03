@@ -150,15 +150,6 @@ var practice = {
     setTimeout(practice.tool, 200);
   },
   tool: function() {
-    practice.trialNumber++;
-    if (practice.trialNumber > 8) {
-      if (practice.trialNumber > 16) {
-        var timeOut = setTimeout(practice.slow, 1000);
-      }
-      else {
-        var timeOut = setTimeout(practice.slow, 2000);        
-      }
-    }
     var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.toolInput+".bmp";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
@@ -166,9 +157,18 @@ var practice = {
     setTimeout(practice.mask1, 200);
   },
   mask1: function() {
+    practice.trialNumber++;
     var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/Mask.bmp";
     showSlide("stage");
-    $("#image").html('<img src="'+url+'">');    
+    $("#image").html('<img src="'+url+'">');
+    if (practice.trialNumber > 8) {
+      if (practice.trialNumber > 16) {
+        var timeOut = setTimeout(practice.slow, 1000); // If trial 17+
+      }
+      else {
+        var timeOut = setTimeout(practice.slow, 2000); // If trial 9-16       
+      }
+    }
     var keyPressHandler = function(event) {
       var keyCode = event.which;      
       if (keyCode != 81 && keyCode != 80) {
@@ -180,8 +180,8 @@ var practice = {
         $("#number").html("");
         if (practice.trialNumber > 8){
           window.clearTimeout(timeOut);
-        }
-        practice.pass();    
+        };
+        setTimeout(practice.pass,100);    
       }
     };
     $(document).one("keydown", keyPressHandler);
