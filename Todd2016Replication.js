@@ -146,7 +146,7 @@ var practice = {
   blackFaceTrials: myPracticeTrialBlackFacesOrder,
   whiteToolTrials: myPracticeTrialWhiteToolsOrder,
   blackToolTrials: myPracticeTrialBlackToolsOrder,
-  trialOrder: myPracticeTrialOrder,
+  trialOrder: practice_list[0],
   keyBindings: myKeyBindings,
   faceInput: "",
   toolInput: "",
@@ -163,13 +163,13 @@ var practice = {
     $("#imgexample2").html('<img src="'+practice.url2+'">');
   },
   next: function() {
-    var typeTrial = practice.trialOrder.shift();
+    var typeTrial = practice_list[0];
     if (typeof typeTrial == "undefined") {
       return practice.end();
     }
 
-      practice.faceInput = face_list[practice_list[0];
-      practice.toolInput = tool_list[practice_list[0];
+      practice.faceInput = face_list[practice_list[0]];
+      practice.toolInput = tool_list[practice_list[0]];
       practice_list.shift();
 
     var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.faceInput+".bmp";
@@ -269,10 +269,13 @@ var experiment = {
     showSlide("practiceInstructions");      
   },
   next: function() {
-    var typeTrial = experiment.trialOrder.shift();
+    var typeTrial = trial_list[0];
+
     if (typeof typeTrial == "undefined") {
       return experiment.end();
     }
+
+
     experiment.faceInput = face_list[trial_list[0]];
     experiment.toolInput = tool_list[trial_list[0]];
     
@@ -331,6 +334,9 @@ var experiment = {
    },
   pass: function() {
     var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/pass.png";
+    if (trial_list.length == 72) { 
+      url = "https://www.stanford.edu/~cinoolee/PSYC254/images/break.png"
+    }
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var keyPressHandler = function(event) {
@@ -356,6 +362,9 @@ var experiment = {
     };        
     experiment.data.push(data);
     var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/red.png";
+    if (trial_list.length == 72) { 
+      url = "https://www.stanford.edu/~cinoolee/PSYC254/images/break.png"
+    }
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var keyPressHandler = function(event) {
