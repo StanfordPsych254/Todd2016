@@ -80,6 +80,11 @@ function shuffle (array) {
 
 var trial_list = Array.apply(null, {length: 144}).map(Number.call, Number).shuffle()
 
+
+var practice_list =  trial_list.shuffle().slice(0,8)
+
+
+
 var allKeyBindings = [
       {"p": "gun", "q": "toy"},
       {"p": "toy", "q": "gun"} ],
@@ -162,14 +167,11 @@ var practice = {
     if (typeof typeTrial == "undefined") {
       return practice.end();
     }
-    if (typeTrial == "w") {
-      practice.faceInput = practice.whiteFaceTrials.shift();
-      practice.toolInput = practice.whiteToolTrials.shift();
-    }
-    else if (typeTrial == "b") {
-      practice.faceInput = practice.blackFaceTrials.shift();
-      practice.toolInput = practice.blackToolTrials.shift();
-    }
+
+      practice.faceInput = face_list[practice_list[0];
+      practice.toolInput = tool_list[practice_list[0];
+      practice_list.shift();
+
     var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.faceInput+".bmp";
     return practice.face();
   },
