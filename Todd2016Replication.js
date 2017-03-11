@@ -38,16 +38,16 @@ var toyimages = ["t1","t2","t3","t4","t5","t6"]
 var images = new Array() 
 for (i=0;i<6;i++) {//loop through images you want to use
     images[i] = new Image()
-    images[i].src =  "http://www.stanford.edu/~cinoolee/PSYC254/images/" + whitefaceimages[i] + ".bmp"
+    images[i].src =  "https://www.stanford.edu/~cinoolee/PSYC254/images/" + whitefaceimages[i] + ".bmp"
     images[i] = new Image()
-    images[i].src =  "http://www.stanford.edu/~cinoolee/PSYC254/images/" + blackfaceimages[i] + ".bmp"
+    images[i].src =  "https://www.stanford.edu/~cinoolee/PSYC254/images/" + blackfaceimages[i] + ".bmp"
     images[i] = new Image()
-    images[i].src =  "http://www.stanford.edu/~cinoolee/PSYC254/images/" + gunimages[i] + ".bmp"
+    images[i].src =  "https://www.stanford.edu/~cinoolee/PSYC254/images/" + gunimages[i] + ".bmp"
     images[i] = new Image()
-    images[i].src =  "http://www.stanford.edu/~cinoolee/PSYC254/images/" + toyimages[i] + ".bmp"    
+    images[i].src =  "https://www.stanford.edu/~cinoolee/PSYC254/images/" + toyimages[i] + ".bmp"    
 }
 var mask = new Image()
-    mask.src =  "http://www.stanford.edu/~cinoolee/PSYC254/images/Mask.bmp"
+    mask.src =  "https://www.stanford.edu/~cinoolee/PSYC254/images/Mask.bmp"
 
 var face_list = [];
 
@@ -146,8 +146,8 @@ var practice = {
   faceInput: "",
   toolInput: "",
   data: [],
-  url1: "http://www.stanford.edu/~cinoolee/PSYC254/images/"+example1+".bmp",
-  url2: "http://www.stanford.edu/~cinoolee/PSYC254/images/"+example2+".bmp",
+  url1: "https://www.stanford.edu/~cinoolee/PSYC254/images/"+example1+".bmp",
+  url2: "https://www.stanford.edu/~cinoolee/PSYC254/images/"+example2+".bmp",
   trialNumber: 0,
   end: function() {
     showSlide("realTrialsInstructions");
@@ -170,17 +170,17 @@ var practice = {
       practice.faceInput = practice.blackFaceTrials.shift();
       practice.toolInput = practice.blackToolTrials.shift();
     }
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.faceInput+".bmp";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.faceInput+".bmp";
     return practice.face();
   },
   face: function() {
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.faceInput+".bmp";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.faceInput+".bmp";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');    
     setTimeout(practice.tool, 200);
   },
   tool: function() {
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.toolInput+".bmp";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+practice.toolInput+".bmp";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var startTime = (new Date()).getTime();
@@ -188,7 +188,7 @@ var practice = {
   },
   mask1: function() {
     practice.trialNumber++;
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/Mask.bmp";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/Mask.bmp";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     if (practice.trialNumber > 8) {
@@ -217,7 +217,7 @@ var practice = {
     $(document).one("keydown", keyPressHandler);
      },
   pass: function() {
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/pass.png";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/pass.png";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var keyPressHandler = function(event) {
@@ -232,7 +232,7 @@ var practice = {
   },
   slow: function() {
     $(document).unbind();
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/red.png";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/red.png";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var keyPressHandler = function(event) {
@@ -283,21 +283,21 @@ var experiment = {
   },
   face: function() {
     $(document).unbind();
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/"+experiment.faceInput+".bmp";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+experiment.faceInput+".bmp";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');    
     setTimeout(experiment.tool, 200);
   },
   tool: function() {
     var timeOut = setTimeout(experiment.slow, 700);  
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/"+experiment.toolInput+".bmp";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/"+experiment.toolInput+".bmp";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var realParity = (experiment.toolType=="s")?"gun":"toy";
     var startTime = (new Date()).getTime();
     var maskOut=setTimeout(function(){ 
 		showSlide("stage");
-    	$("#image").html('<img src="http://stanford.edu/~cinoolee/PSYC254/images/Mask.bmp">');
+    	$("#image").html('<img src="https://stanford.edu/~cinoolee/PSYC254/images/Mask.bmp">');
   		}
   	,200);
     var keyPressHandler = function(event) {
@@ -328,7 +328,7 @@ var experiment = {
 
    },
   pass: function() {
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/pass.png";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/pass.png";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var keyPressHandler = function(event) {
@@ -353,7 +353,7 @@ var experiment = {
       responded: 0
     };        
     experiment.data.push(data);
-    var url ="http://www.stanford.edu/~cinoolee/PSYC254/images/red.png";
+    var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/red.png";
     showSlide("stage");
     $("#image").html('<img src="'+url+'">');
     var keyPressHandler = function(event) {
