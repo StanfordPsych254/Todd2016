@@ -49,6 +49,36 @@ for (i=0;i<6;i++) {//loop through images you want to use
 var mask = new Image()
     mask.src =  "http://www.stanford.edu/~cinoolee/PSYC254/images/Mask.bmp"
 
+var face_list = [];
+
+var image = ["w01","w02","w03","w04","w05","w06","b01","b02","b03","b04","b05","b06"]
+
+var arrayLength = image.length;
+for (var i = 0; i < arrayLength; i++) {
+  face_list = face_list.concat(Array(12).fill(image[i]));
+}
+
+var tool_list = []
+var tools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6"]
+var arrayLength = tools.length;
+for (var i = 0; i < arrayLength; i++) {
+  tool_list = tool_list.concat(tools);
+}
+
+function shuffle (array) {
+  var i = 0
+    , j = 0
+    , temp = null
+
+  for (i = array.length - 1; i > 0; i -= 1) {
+    j = Math.floor(Math.random() * (i + 1))
+    temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+}
+
+var trial_list = Array.apply(null, {length: 144}).map(Number.call, Number).shuffle()
 
 var allKeyBindings = [
       {"p": "gun", "q": "toy"},
@@ -241,14 +271,11 @@ var experiment = {
     if (typeof typeTrial == "undefined") {
       return experiment.end();
     }
-    if (typeTrial == "w") {
-      experiment.faceInput = experiment.whiteFaceTrials.shift();
-      experiment.toolInput = experiment.whiteToolTrials.shift();
-    }
-    else if (typeTrial == "b") {
-      experiment.faceInput = experiment.blackFaceTrials.shift();
-      experiment.toolInput = experiment.blackToolTrials.shift();
-    }
+    experiment.faceInput = face_list[trial_list[0]];
+    experiment.toolInput = tool_list[trial_list[0]];
+    
+    trial_list.shift();
+    
     experiment.faceType = typeTrial;
     var toolString = ""+experiment.toolInput+"";
     experiment.toolType = toolString.charAt(0);
