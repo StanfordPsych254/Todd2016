@@ -79,10 +79,10 @@ function shuffle (array) {
 }
 
 var trial_list = Array.apply(null, {length: 144}).map(Number.call, Number).shuffle()
-
+var trial_list_save = trial_list 
 
 var practice_list =  trial_list.shuffle().slice(0,8)
-
+var practice_list_save = practice_list
 
 
 var allKeyBindings = [
@@ -250,6 +250,8 @@ var practice = {
 }
 
 var experiment = {
+  trial_order:trial_list_save,
+  practice_order:practice_list_save,
   whiteFaceTrials: myTrialWhiteFacesOrder,
   blackFaceTrials: myTrialBlackFacesOrder,
   whiteToolTrials: myTrialWhiteToolsOrder,
