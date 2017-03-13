@@ -88,8 +88,8 @@ var practice_list_save = practice_list
 var allKeyBindings = [
       {"p": "gun", "q": "toy"},
       {"p": "toy", "q": "gun"} ],
-    allPracticeTrialOrders = [],
-    allTrialOrders = [],
+    //allPracticeTrialOrders = [],
+    //allTrialOrders = [],
     myKeyBindings = allKeyBindings.random(),
     pFair = (myKeyBindings["p"] == "toy");
     fairKey = "";
@@ -105,29 +105,29 @@ var allKeyBindings = [
       leftKey = "toy";
       rightKey = "gun";
     }
-    practiceTrialNumber: 0;
-    allPracticeTrialWhiteFaces = ["w01","w02","w03","w04","w05","w06"],
-    allPracticeTrialBlackFaces = ["b01","b02","b03","b04","b05","b06"],
-    allPracticeTrialWhiteTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6"],
-    allPracticeTrialBlackTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6"],
-    allPracticeTrialOrder = ["w","w","w","w","b","b","b","b","w","w","w","w","b","b","b","b","w","w","w","w","b","b","b","b"],
-    allTrialWhiteFaces = ["w01","w02","w03","w04","w05","w06","w01","w02","w03","w04","w05","w06","w01","w02","w03","w04","w05","w06"],
-    allTrialBlackFaces = ["b01","b02","b03","b04","b05","b06","b01","b02","b03","b04","b05","b06","b01","b02","b03","b04","b05","b06"],
-    allTrialWhiteTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g5","g6","t5","t6"],
-    allTrialBlackTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g5","g6","t5","t6"],
-    allTrialOrder = ["w","w","w","w","w","w","b","b","b","b","b","b","w","w","w","w","w","w","b","b","b","b","b","b","w","w","w","w","w","w","b","b","b","b","b","b","w","w","w","w","b","b","b","b"],
-    example1 = "g5",
-    example2 = "t5",
-    myPracticeTrialWhiteFacesOrder = allPracticeTrialWhiteFaces.shuffle(),
-    myPracticeTrialBlackFacesOrder = allPracticeTrialBlackFaces.shuffle(),
-    myPracticeTrialWhiteToolsOrder = allPracticeTrialWhiteTools.shuffle(),
-    myPracticeTrialBlackToolsOrder = allPracticeTrialBlackTools.shuffle(),
-    myPracticeTrialOrder = allPracticeTrialOrder.shuffle(),
-    myTrialWhiteFacesOrder = allTrialWhiteFaces.shuffle(),
-    myTrialBlackFacesOrder = allTrialBlackFaces.shuffle(),
-    myTrialWhiteToolsOrder = allTrialWhiteTools.shuffle(),
-    myTrialBlackToolsOrder = allTrialBlackTools.shuffle(),
-    myTrialOrder = allTrialOrder.shuffle(),
+    //practiceTrialNumber: 0;
+    //allPracticeTrialWhiteFaces = ["w01","w02","w03","w04","w05","w06"],
+    //allPracticeTrialBlackFaces = ["b01","b02","b03","b04","b05","b06"],
+    //allPracticeTrialWhiteTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6"],
+    //allPracticeTrialBlackTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6"],
+    //allPracticeTrialOrder = ["w","w","w","w","b","b","b","b","w","w","w","w","b","b","b","b","w","w","w","w","b","b","b","b"],
+    //allTrialWhiteFaces = ["w01","w02","w03","w04","w05","w06","w01","w02","w03","w04","w05","w06","w01","w02","w03","w04","w05","w06"],
+    //allTrialBlackFaces = ["b01","b02","b03","b04","b05","b06","b01","b02","b03","b04","b05","b06","b01","b02","b03","b04","b05","b06"],
+    //allTrialWhiteTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g5","g6","t5","t6"],
+    //allTrialBlackTools = ["g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g1","g2","g3","g4","g5","g6","t1","t2","t3","t4","t5","t6","g5","g6","t5","t6"],
+    //allTrialOrder = ["w","w","w","w","w","w","b","b","b","b","b","b","w","w","w","w","w","w","b","b","b","b","b","b","w","w","w","w","w","w","b","b","b","b","b","b","w","w","w","w","b","b","b","b"],
+    //example1 = "g5",
+    //example2 = "t5",
+    //myPracticeTrialWhiteFacesOrder = allPracticeTrialWhiteFaces.shuffle(),
+    //myPracticeTrialBlackFacesOrder = allPracticeTrialBlackFaces.shuffle(),
+    //myPracticeTrialWhiteToolsOrder = allPracticeTrialWhiteTools.shuffle(),
+    //myPracticeTrialBlackToolsOrder = allPracticeTrialBlackTools.shuffle(),
+    //myPracticeTrialOrder = allPracticeTrialOrder.shuffle(),
+    //myTrialWhiteFacesOrder = allTrialWhiteFaces.shuffle(),
+    //myTrialBlackFacesOrder = allTrialBlackFaces.shuffle(),
+    //myTrialWhiteToolsOrder = allTrialWhiteTools.shuffle(),
+    //myTrialBlackToolsOrder = allTrialBlackTools.shuffle(),
+    //myTrialOrder = allTrialOrder.shuffle(),
 
 $("#fair-key").html(fairKey);
 $("#unfair-key").html(unfairKey);
@@ -142,17 +142,17 @@ showSlide("instructions");
 var timeOut;
 
 var practice = {
-  whiteFaceTrials: myPracticeTrialWhiteFacesOrder,
-  blackFaceTrials: myPracticeTrialBlackFacesOrder,
-  whiteToolTrials: myPracticeTrialWhiteToolsOrder,
-  blackToolTrials: myPracticeTrialBlackToolsOrder,
+  //whiteFaceTrials: myPracticeTrialWhiteFacesOrder,
+  //blackFaceTrials: myPracticeTrialBlackFacesOrder,
+  //whiteToolTrials: myPracticeTrialWhiteToolsOrder,
+  //blackToolTrials: myPracticeTrialBlackToolsOrder,
   trialOrder: practice_list[0],
   keyBindings: myKeyBindings,
   faceInput: "",
   toolInput: "",
   data: [],
-  url1: "https://www.stanford.edu/~cinoolee/PSYC254/images/"+example1+".bmp",
-  url2: "https://www.stanford.edu/~cinoolee/PSYC254/images/"+example2+".bmp",
+  //url1: "https://www.stanford.edu/~cinoolee/PSYC254/images/"+example1+".bmp",
+  //url2: "https://www.stanford.edu/~cinoolee/PSYC254/images/"+example2+".bmp",
   trialNumber: 0,
   end: function() {
     showSlide("realTrialsInstructions");
@@ -252,11 +252,11 @@ var practice = {
 var experiment = {
   trial_order:trial_list_save,
   practice_order:practice_list_save,
-  whiteFaceTrials: myTrialWhiteFacesOrder,
-  blackFaceTrials: myTrialBlackFacesOrder,
-  whiteToolTrials: myTrialWhiteToolsOrder,
-  blackToolTrials: myTrialBlackToolsOrder,
-  trialOrder: myTrialOrder,
+  //whiteFaceTrials: myTrialWhiteFacesOrder,
+  //blackFaceTrials: myTrialBlackFacesOrder,
+  //whiteToolTrials: myTrialWhiteToolsOrder,
+  //blackToolTrials: myTrialBlackToolsOrder,
+  //trialOrder: myTrialOrder,
   keyBindings: myKeyBindings,
   faceInput: "",
   toolInput: "",
