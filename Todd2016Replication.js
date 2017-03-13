@@ -336,7 +336,10 @@ var experiment = {
    },
   pass: function() {
     var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/pass.png";
-    if (trial_list.length == 72) { 
+    if (trial_list.length == 48) { 
+      url = "https://www.stanford.edu/~cinoolee/PSYC254/images/break.png"
+    }
+    if (trial_list.length == 96) { 
       url = "https://www.stanford.edu/~cinoolee/PSYC254/images/break.png"
     }
     showSlide("stage");
