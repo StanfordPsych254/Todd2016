@@ -316,10 +316,11 @@ var experiment = {
             key = (keyCode == 80) ? "p" : "q",
             userParity = experiment.keyBindings[key];
             data = {
+           trial_num: 144 - trial_list.length,
               race: experiment.faceType,
-              gun: experiment.toolType,
+              tool: experiment.toolType,
               raceStim: experiment.faceInput,
-              gunStim: experiment.toolInput,
+              toolStim: experiment.toolInput,
               accuracy: realParity == userParity ? 1 : 0,
               rt: endTime - startTime,
               responded: 1
@@ -357,6 +358,7 @@ var experiment = {
   slow: function() {
     $(document).unbind();
     data = {
+      trial_num: 144 - trial_list.length,
       race: experiment.faceType,
       tool: experiment.toolType,
       raceStim: experiment.faceInput,
@@ -364,7 +366,7 @@ var experiment = {
       accuracy: 0,
       rt: 0,
       responded: 0
-    };        
+    };     
     experiment.data.push(data);
     var url ="https://www.stanford.edu/~cinoolee/PSYC254/images/red.png";
     if (trial_list.length == 72) { 
