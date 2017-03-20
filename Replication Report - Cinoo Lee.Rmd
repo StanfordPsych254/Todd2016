@@ -1,0 +1,256 @@
+---
+title: "Replication of 'Does Seeing Faces of Young
+Black Boys Facilitate the Identification of
+Threatening Stimuli?' by Todd, Thiem, & Neel (2016, Psychological Science)"
+author: "Cinoo Lee (cinoolee@stanford.edu)"
+date: "2017.03"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+Link to sandbox: https://workersandbox.mturk.com/mturk/preview?groupId=3VQ3WJ3HVO1E3IPW2QDJPK64XPFMIP
+
+<!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
+
+##Introduction
+
+We will try to replicate the following result from the original study:
+
+"Pervasive stereotypes linking Black men with violence and criminality can lead to implicit cognitive biases, including the misidentification of harmless objects as weapons. [..] We investigated whether these biases extend even to young Black boys (5-year-olds). Results [revealed] that participants had less difficulty (i.e., faster response times, fewer errors) identifying threatening stimuli and more difficulty identifying nonthreatening stimuli after seeing Black faces than after seeing White faces."
+(Todd et al., 2016)
+
+##Methods
+
+"White participants completed sequential priming tasks in which they categorized threatening and nonthreatening objects (toys and guns) and words after brief presentations of Black and White children's faces."
+
+###Power Analysis
+
+Original ηp2 = .22 which translates into an effect size of 0.531085. Power analysis shows that I need 16 participants for 80% power, 20 for 90%, and 24 for 95% power.
+
+###Planned Sample
+
+Planned sample size is 32 (99% power). Known demographics is White participants.
+
+###Materials
+
+"The primes were 12 photos of boys (6 Black, 6 White) taken from the Child Affective Facial Expression set (LoBue & Thrasher, 2015). We selected these photos
+using the following criteria: The faces had to be easily categorized by race, to have a neutral expression, to have no idiosyncrasies (e.g., facial scars), and to be similar in actual age (mean age for Black faces = 4.98 years; mean age for White faces = 5.01 years; p > .250). Each photo was cropped so that it included only the head and was standardized in size. The target objects were 6 gun images taken from Payne (2001) and 6 toy images (e.g., a rattle) taken from online sources. The toy images were converted to gray scale and sized to match the gun images."
+
+###Procedure	
+
+Instead of beginning with a blank screen (500 ms) like in the original article, we began with a screen that instructed participants to "Press the spacebar to continue" after each trial. The rest of the procedures were the same.
+"Each trial sequence began [..] followed by a face prime (200 ms), then a target object (200 ms), and finally a pattern mask (which remained on screen until participants responded). If participants did not respond within 500 ms, a message (“Please respond faster!”) appeared for 1 s. Each of the 12 face primes was paired once with each of the 12 target objects, which resulted in 144 randomly ordered experimental trials. Eight practice trials preceded the experimental trials."
+
+###Analysis Plan
+
+"Before analysis, we excluded errors and RTs less than 100 ms. RTs exceeding
+the 500-ms deadline were excluded from analyses, and responses on those trials were treated as errors. We then subjected the remaining RTs to a log transformation(Payne, 2001); however, for interpretive ease, we report
+raw RTs.
+A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA) revealed a significant interaction."
+
+**Clarify key analysis of interest here**  A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA)
+
+###Differences from Original Study
+
+Difference in procedure is noted above. Instead of a lab study, this study will be conducted online. These differences are not anticipated to make a difference in the effect.
+
+### Methods Addendum (Post Data Collection)
+
+You can comment this section out prior to final report with data collection.
+
+#### Actual Sample
+  Sample size:
+  Demographics: 
+  Data exclusions: Data will be excluded if less than 50% correct.
+
+#### Differences from pre-data collection methods plan
+  Any differences from what was described as the original plan, or “none”.
+
+##Results
+
+
+### Data preparation
+
+Data preparation following the analysis plan.
+	
+```{r include=F}
+###Data Preparation
+####Load Relevant Libraries and Functions
+
+library(tidyverse)
+library(forcats)
+library(rjson)
+
+
+####Import data
+raw.data.path <- "~/Documents/Classes/Winter2017/PSYC254/Replication/Cosub/Todd2016/mturk/sandbox-results/"
+
+files <- dir(raw.data.path,pattern="*.json")
+d.raw <- data.frame()
+
+for (f in files) {
+  jf <- paste0(raw.data.path,f)
+  jd <- fromJSON(file=jf)
+  
+  id <- data.frame(workerid = jd$WorkerId, 
+                   religAff = jd$answers$demographicsData[[1]]$ReligiousAffiliation,
+                   religAtt = jd$answers$demographicsData[[1]]$ReligiousAttendance,
+                   ses = jd$answers$demographicsData[[1]]$SES,
+                   age = jd$answers$demographicsData[[1]]$Age,
+                   political = jd$answers$demographicsData[[1]]$Political,
+                   comments = jd$answers$demographicsData[[1]]$Comments,
+                   Edu = jd$answers$demographicsData[[1]]$Education,
+                   Citizen = jd$answers$demographicsData[[1]]$Citizen,
+                   Gender = jd$answers$demographicsData[[1]]$Male,
+                   Ethnicity = jd$answers$demographicsData[[1]]$Ethnicity,
+                   trial_num = 1:144,
+                   rt = NA,
+                   accuracy = NA,
+                   raceStim = NA,
+                   toolType= NA,
+                   race = NA,
+                   toolStim = NA,
+                   responded = NA)
+    
+      for(i in 1:144) {
+    id$rt[id$trial_num == i] <- jd$answers$data[[i]]$rt
+    id$raceStim[id$trial_num == i] <- jd$answers$data[[i]]$raceStim
+    id$toolType[id$trial_num == i] <- jd$answers$data[[i]]$tool
+    id$race[id$trial_num == i] <- jd$answers$data[[i]]$race
+    id$toolStim[id$trial_num == i] <- jd$answers$data[[i]]$toolStim
+    id$responded[id$trial_num == i] <- jd$answers$data[[i]]$responded
+    id$accuracy[id$trial_num == i] <- jd$answers$data[[i]]$accuracy
+  }
+  
+    d.raw <- bind_rows(d.raw, id)
+    View(d.raw)
+    
+}
+summary(d.raw)
+
+d <- d.raw %>%
+  select(-race) %>%
+  mutate(targetRace = substr(d.raw$raceStim,0,1))
+  
+d$rt[d$rt == 0] <- NA
+
+d$toolType = factor(d$toolType) 
+d$targetRace = factor(d$targetRace)
+d$Edu = factor(d$Edu) 
+d$Citizen = factor(d$Citizen)
+d$Gender = factor(d$Gender)
+d$Ethnicity = factor(d$Ethnicity)
+
+#finish the rest
+
+library(forcats)
+d$toolType = fct_recode(d$toolType,
+                      "Toy" = "t",
+                        "Gun" = "g")
+
+d$targetRace = fct_recode(d$targetRace,
+                      "Black" = "b",
+                        "White" = "w")
+d$Edu = fct_recode(d$Edu,
+                   "Some_hs" = "1",
+                   "Completed_hs" = "2",
+                   "Some_college" = "3",
+                   "Bachelors_degree" = "4",
+                   "Masters_Professional_Doctoral" = "5")
+
+d$Citizen = fct_recode(d$Citizen,
+                   "American Citizen" = "1",
+                   "Permanent Resident of the United States" = "2",
+                   "Foreign Citizen" = "3")
+
+d$Gender = fct_recode(d$Gender,
+                   "Male" = "1",
+                   "Female" = "0")
+                   
+d$Ethnicity = fct_recode(d$Ethnicity,
+                   "Caucasian/White" = "1",
+                   "Hispanic/Latino/Latina" = "2",
+                   "African American/Black" = "3",
+                   "Hispanic/Latino/Latina" = "4",
+                   "East Asian" = "5",
+                   "Middle Eastern" = "6",
+                   "Pacific Islander" = "7",
+                   "Native American" = "8",
+                   "Mixed" = "9")
+
+# Number of participants
+length(unique(d$workerid))
+```
+
+Start with a histogram, ALWAYS.
+```{r}
+ggplot(d.raw, aes(x=rt)) + 
+  geom_histogram() +
+  facet_grid(workerid~.)
+
+#### Prepare data for analysis - create columns etc.
+
+sem <- function(x) {sd(x) / sqrt(length(x))}
+
+ci95.norm <- function(x) {
+  me <- sem(x)*qnorm(.975)
+  c(mean(x)-me, mean(x)+me)
+}
+
+means <- d %>%
+  filter(accuracy == 1) %>% # if you only want correct trials
+  filter(!is.na(rt)) %>%
+  group_by(targetRace, toolType) %>%
+  summarise(m = mean(rt), ci.lo = ci95.norm(rt)[1], ci.hi = ci95.norm(rt)[2])
+
+limits = aes(ymax=ci.hi, ymin=ci.lo)
+
+ggplot(means, aes(x=targetRace, y=m, fill=toolType)) +
+  geom_bar(stat="identity", position="dodge", width=.9) + 
+  geom_errorbar(limits, position=position_dodge(width=.9), width=0.05) +
+  theme_bw() +
+  ggtitle("Weapon Identification Reaction Times") +
+  labs(x = "Target race", y = "Mean reaction time (ms)")
+```
+
+
+### Data Analysis
+```{r}
+#install.packages("ez")
+library(ez)
+d.complete <- filter(d, !(is.na(d$rt)))
+
+aov <- ezANOVA(data = d.complete, dv = rt, wid = workerid, within = .(targetRace, toolType), detailed = TRUE)
+
+# CALC PARTIAL ETA SQUARED LATER
+
+```
+
+### Confirmatory analysis
+
+The analyses as specified in the analysis plan.  
+
+*Side-by-side graph with original graph is ideal here*
+Original paper did not include a graph.
+
+*exclusion criteria*
+Less than 50% correct.
+
+###Exploratory analyses
+
+Any follow-up analyses desired (not required).  
+
+## Discussion
+
+
+### Summary of Replication Attempt
+
+Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+
+### Commentary
+
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
