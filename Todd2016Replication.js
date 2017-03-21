@@ -417,7 +417,7 @@ var demographics = {
       };
       experiment.demographicsData.push(data);    
       showSlide("finished");
-      setTimeout(function() { turk.submit(experiment) }, 1500);
+      setTimeout(function() { turk.submit(experiment) }, 3000);
     }
   }
 }
