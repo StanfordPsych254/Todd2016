@@ -71,8 +71,9 @@ Difference in procedure is noted above. Instead of a lab study, this study will 
 
 
 ### Data preparation
-```{r include=F}
-###Data Preparation
+
+```{r include = F}
+
 ####Load Relevant Libraries and Functions
 #install.packages("ez")
 library(tidyverse)
@@ -177,7 +178,9 @@ d$Ethnicity = fct_recode(d$Ethnicity,
 
 # Number of participants
 length(unique(d$workerid))
+```
 
+```{r}
 ###Exclusion 
 #Exclude non-White participants
 d <- d %>%
