@@ -86,7 +86,7 @@ library(rjson)
 
 
 ####Import data
-raw.data.path <- "~/Documents/Classes/Winter2017/PSYC254/Replication/Cosub/Todd2016/mturk/sandbox-results/"
+raw.data.path <- "~/Documents/Classes/Winter2017/PSYC254/Replication/Cosub/Todd2016/mturk/production-results/"
 
 files <- dir(raw.data.path,pattern="*.json")
 d.raw <- data.frame()
@@ -167,17 +167,18 @@ d$Citizen = fct_recode(d$Citizen,
 d$Gender = fct_recode(d$Gender,
                    "Male" = "1",
                    "Female" = "0")
+
                    
 d$Ethnicity = fct_recode(d$Ethnicity,
-                   "Caucasian/White" = "1",
-                   "Hispanic/Latino/Latina" = "2",
-                   "African American/Black" = "3",
-                   "Hispanic/Latino/Latina" = "4",
-                   "East Asian" = "5",
-                   "Middle Eastern" = "6",
-                   "Pacific Islander" = "7",
-                   "Native American" = "8",
-                   "Mixed" = "9")
+                    "Caucasian/White" = "1",
+                    "Hispanic/Latino/Latina" = "2",
+                    "African American/Black" = "3",
+                    "Hispanic/Latino/Latina" = "4",
+                    "East Asian" = "5",
+                    "Middle Eastern" = "6",
+                    "Pacific Islander" = "7",
+                    "Native American" = "8",
+                    "Mixed" = "9")
 
 # Number of participants
 length(unique(d$workerid))
@@ -185,6 +186,10 @@ length(unique(d$workerid))
 
 Start with a histogram, ALWAYS.
 ```{r}
+#Exclude non-White participants
+d <- d %>%
+  filter(Ethnicity == "Caucasian/White")
+
 ggplot(d, aes(x=rt)) + 
   geom_histogram() +
   facet_grid(workerid~.)
@@ -192,7 +197,6 @@ ggplot(d, aes(x=rt)) +
 summary(d) #examine rt outliers
 
 #### Prepare data for analysis - create columns etc.
-
 sem <- function(x) {sd(x) / sqrt(length(x))}
 
 ci95.norm <- function(x) {
@@ -202,13 +206,11 @@ ci95.norm <- function(x) {
 
 means <- d %>%
   filter(accuracy == 1) %>% #only want correct trials
-  filter(Ethnicity == "Caucasian/White") %>%
   filter(!is.na(rt)) %>%
   group_by(workerid, targetRace, toolType) %>%
-  summarise(participant_mean = mean(rt) %>%
+  summarise(participant_mean = mean(rt)) %>%
   group_by(targetRace, toolType, add=FALSE) %>%
   summarise(m = mean(participant_mean), ci.lo=ci95.norm(participant_mean)[1], ci.hi = ci95.norm(rt)[2])
-
 
 limits = aes(ymax=ci.hi, ymin=ci.lo)
 
