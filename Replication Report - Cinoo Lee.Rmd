@@ -18,8 +18,7 @@ output:
 
 We will try to replicate the following result from the original study:
 
-"Pervasive stereotypes linking Black men with violence and criminality can lead to implicit cognitive biases, including the misidentification of harmless objects as weapons. [..] We investigated whether these biases extend even to young Black boys (5-year-olds). Results [revealed] that participants had less difficulty (i.e., faster response times, fewer errors) identifying threatening stimuli and more difficulty identifying nonthreatening stimuli after seeing Black faces than after seeing White faces."
-(Todd et al., 2016)
+"Pervasive stereotypes linking Black men with violence and criminality can lead to implicit cognitive biases, including the misidentification of harmless objects as weapons. [..] We investigated whether these biases extend even to young Black boys (5-year-olds). Results [revealed] that participants had less difficulty (i.e., faster response times, fewer errors) identifying threatening stimuli and more difficulty identifying nonthreatening stimuli after seeing Black faces than after seeing White faces." (Todd et al., 2016)
 
 ##Methods
 
@@ -31,7 +30,7 @@ Original $\sf{η_{p}}$^2^ = .22 which translates into an effect size of 0.53. Po
 
 ###Planned Sample
 
-Other - Planned sample size is 37. 99% power yields n = 32 and we added 5, which is 15% of 32 to ensure we will still have enough participants after the exclusion criteria.. We will exclude non-White participants in the analysis.
+Other - Planned sample size is 37. 99% power yields n = 32 and we added 5, which is 15% of 32 to ensure we will still have enough participants after the exclusion criteria. We will exclude non-White participants in the analysis.
 
 ###Materials
 
@@ -44,7 +43,7 @@ Instead of beginning with a blank screen (500 ms) like in the original article, 
 
 ###Analysis Plan
 
-"We decided a priori to exclude data from participants with below-chance accuracy (i.e., errors on > 50% of trials) on the weapon identification task.""
+"We decided a priori to exclude data from participants with below-chance accuracy (i.e., errors on > 50% of trials) on the weapon identification task."
 
 "Before analysis, we excluded errors and RTs less than 100 ms. RTs exceeding
 the 500-ms deadline were excluded from analyses, and responses on those trials were treated as errors. We then subjected the remaining RTs to a log transformation (Payne, 2001); however, for interpretive ease, we report raw RTs.
