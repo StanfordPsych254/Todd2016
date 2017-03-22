@@ -27,7 +27,7 @@ We will try to replicate the following result from the original study:
 
 ###Power Analysis
 
-Original ηp^2 = .22 which translates into an effect size of 0.53. Power analysis shows that I need 16 participants for 80% power, 20 for 90%, and 24 for 95% power. This effect size is for the 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA).
+Original $\sf{η_{p}}$^2^ = .22 which translates into an effect size of 0.53. Power analysis shows that I need 16 participants for 80% power, 20 for 90%, and 24 for 95% power. This effect size is for the 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA).
 
 ###Planned Sample
 
@@ -45,11 +45,12 @@ Instead of beginning with a blank screen (500 ms) like in the original article, 
 ###Analysis Plan
 
 "Before analysis, we excluded errors and RTs less than 100 ms. RTs exceeding
-the 500-ms deadline were excluded from analyses, and responses on those trials were treated as errors. We then subjected the remaining RTs to a log transformation(Payne, 2001); however, for interpretive ease, we report
-raw RTs.
+the 500-ms deadline were excluded from analyses, and responses on those trials were treated as errors. We then subjected the remaining RTs to a log transformation (Payne, 2001); however, for interpretive ease, we report raw RTs.
 A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA) revealed a significant interaction."
 
 The 2 X 2 will be a target by prime interaction.
+
+Data will be excluded if less than 50% correct and also we will only analyze data from people who indicated their race as White.
 
 ###Differences from Original Study
 
@@ -57,25 +58,19 @@ Difference in procedure is noted above. Instead of a lab study, this study will 
 
 ### Methods Addendum (Post Data Collection)
 
-You can comment this section out prior to final report with data collection.
 
 #### Actual Sample
   Sample size:
   Demographics: 
-  Data exclusions: Data will be excluded if less than 50% correct and also we will only analyze data from people who indicated their race as White.
+  Data exclusions: 
 
 #### Differences from pre-data collection methods plan
-  Any differences from what was described as the original plan, or “none”.
+  None.
 
 ##Results
 
-Original data: F(1, 62) = 17.21, p < .001
-
 
 ### Data preparation
-
-Data preparation following the analysis plan.
-	
 ```{r include=F}
 ###Data Preparation
 ####Load Relevant Libraries and Functions
@@ -134,7 +129,7 @@ summary(d.raw)
 d <- d.raw %>%
   select(-race) %>%
   mutate(targetRace = substr(d.raw$raceStim,0,1))
-  
+
 d$rt[d$rt == 0] <- NA
 
 d$toolType = factor(d$toolType) 
@@ -144,6 +139,7 @@ d$Citizen = factor(d$Citizen)
 d$Gender = factor(d$Gender)
 d$Ethnicity = factor(d$Ethnicity)
 
+###Factoring and re-labeling
 library(forcats)
 d$toolType = fct_recode(d$toolType,
                       "Toy" = "t",
@@ -167,7 +163,6 @@ d$Citizen = fct_recode(d$Citizen,
 d$Gender = fct_recode(d$Gender,
                    "Male" = "1",
                    "Female" = "0")
-
                    
 d$Ethnicity = fct_recode(d$Ethnicity,
                     "Caucasian/White" = "1",
@@ -182,21 +177,24 @@ d$Ethnicity = fct_recode(d$Ethnicity,
 
 # Number of participants
 length(unique(d$workerid))
-```
 
-Start with a histogram, ALWAYS.
-```{r}
+###Exclusion 
 #Exclude non-White participants
 d <- d %>%
   filter(Ethnicity == "Caucasian/White")
 
-ggplot(d, aes(x=rt)) + 
-  geom_histogram() +
-  facet_grid(workerid~.)
+#FIGURE OUT HOW TO filter out participants who have less than 50% accuracy
+assess_accuracy  <- d %>%
+  group_by(workerid) %>%
+  summarise(mean_accuracy = mean(accuracy))
 
-summary(d) #examine rt outliers
+d.complete <- d %>%
+   filter(!(is.na(d$rt)) & accuracy == 1 & rt > 100 &  rt <= 500) %>%
+   mutate(log_rt = log(rt))
+```
 
-#### Prepare data for analysis - create columns etc.
+###Plotting Preparation
+```{r}
 sem <- function(x) {sd(x) / sqrt(length(x))}
 
 ci95.norm <- function(x) {
@@ -204,46 +202,37 @@ ci95.norm <- function(x) {
   c(mean(x)-me, mean(x)+me)
 }
 
-means <- d %>%
+means <- d.complete %>%
   filter(accuracy == 1) %>% #only want correct trials
   filter(!is.na(rt)) %>%
   group_by(workerid, targetRace, toolType) %>%
   summarise(participant_mean = mean(rt)) %>%
   group_by(targetRace, toolType, add=FALSE) %>%
-  summarise(m = mean(participant_mean), ci.lo=ci95.norm(participant_mean)[1], ci.hi = ci95.norm(rt)[2])
+  summarise(m = mean(participant_mean), ci.lo=ci95.norm(participant_mean)[1], ci.hi = ci95.norm(participant_mean)[2])
 
 limits = aes(ymax=ci.hi, ymin=ci.lo)
+```
 
-ggplot(means, aes(x=targetRace, y=participant_mean, fill=toolType)) +
+### Confirmatory analysis
+
+```{r}
+###PLOT
+ggplot(means, aes(x=targetRace, y=m, fill=toolType)) +
   geom_bar(stat="identity", position="dodge", width=.9) + 
   geom_errorbar(limits, position=position_dodge(width=.9), width=0.05) +
   theme_bw() +
   ggtitle("Weapon Identification Reaction Times") +
   labs(x = "Target race", y = "Mean reaction time (ms)")
-```
 
-
-### Data Analysis
-```{r}
+###ANALYSIS
 #install.packages("ez")
 library(ez)
-d.complete <- filter(d, !(is.na(d$rt)))
+#d <- filter(d, !(is.na(d$rt)))
 
-aov <- ezANOVA(data = d.complete, dv = rt, wid = workerid, within = .(targetRace, toolType), detailed = TRUE)
+aov <- ezANOVA(data = d.complete, dv = log_rt, wid = workerid, within = .(targetRace, toolType), detailed = TRUE)
 
 # CALC PARTIAL ETA SQUARED LATER
-
 ```
-
-### Confirmatory analysis
-
-The analyses as specified in the analysis plan.  
-
-*Side-by-side graph with original graph is ideal here*
-Original paper did not include a graph.
-
-*exclusion criteria*
-Less than 50% correct. non-White participants.
 
 ###Exploratory analyses
 
