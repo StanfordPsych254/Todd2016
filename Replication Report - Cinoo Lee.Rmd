@@ -47,9 +47,7 @@ Instead of beginning with a blank screen (500 ms) like in the original article, 
 
 "Before analysis, we excluded errors and RTs less than 100 ms. RTs exceeding
 the 500-ms deadline were excluded from analyses, and responses on those trials were treated as errors. We then subjected the remaining RTs to a log transformation (Payne, 2001); however, for interpretive ease, we report raw RTs.
-A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA) revealed a significant interaction."
-
-The 2 X 2 will be a target by prime interaction.
+A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA) revealed a significant interaction." The key test will be the interaction effect of this 2 X 2 ANOVA.
 
 We will only analyze data from people who indicated their race as White.
 
