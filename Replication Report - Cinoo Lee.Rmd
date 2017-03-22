@@ -12,8 +12,6 @@ output:
       collapsed: false
 ---
 
-Link to sandbox: https://workersandbox.mturk.com/mturk/preview?groupId=3VQ3WJ3HVO1E3IPW2QDJPK64XPFMIP
-
 <!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
 
 ##Introduction
@@ -29,16 +27,15 @@ We will try to replicate the following result from the original study:
 
 ###Power Analysis
 
-Original ηp2 = .22 which translates into an effect size of 0.531085. Power analysis shows that I need 16 participants for 80% power, 20 for 90%, and 24 for 95% power.
+Original ηp^2 = .22 which translates into an effect size of 0.53. Power analysis shows that I need 16 participants for 80% power, 20 for 90%, and 24 for 95% power. This effect size is for the 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA).
 
 ###Planned Sample
 
-Planned sample size is 32 (99% power). Known demographics is White participants.
+Other - Planned sample size is 37. 99% power yields n = 32 and we added 5, which is 15% of 32 to ensure we will still have enough participants after the exclusion criteria.. We will exclude non-White participants in the analysis.
 
 ###Materials
 
-"The primes were 12 photos of boys (6 Black, 6 White) taken from the Child Affective Facial Expression set (LoBue & Thrasher, 2015). We selected these photos
-using the following criteria: The faces had to be easily categorized by race, to have a neutral expression, to have no idiosyncrasies (e.g., facial scars), and to be similar in actual age (mean age for Black faces = 4.98 years; mean age for White faces = 5.01 years; p > .250). Each photo was cropped so that it included only the head and was standardized in size. The target objects were 6 gun images taken from Payne (2001) and 6 toy images (e.g., a rattle) taken from online sources. The toy images were converted to gray scale and sized to match the gun images."
+"The primes were 12 photos of boys (6 Black, 6 White) taken from the Child Affective Facial Expression set (LoBue & Thrasher, 2015). We selected these photos using the following criteria: The faces had to be easily categorized by race, to have a neutral expression, to have no idiosyncrasies (e.g., facial scars), and to be similar in actual age (mean age for Black faces = 4.98 years; mean age for White faces = 5.01 years; p > .250). Each photo was cropped so that it included only the head and was standardized in size. The target objects were 6 gun images taken from Payne (2001) and 6 toy images (e.g., a rattle) taken from online sources. The toy images were converted to gray scale and sized to match the gun images."
 
 ###Procedure	
 
@@ -52,7 +49,7 @@ the 500-ms deadline were excluded from analyses, and responses on those trials w
 raw RTs.
 A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA) revealed a significant interaction."
 
-**Clarify key analysis of interest here**  A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA)
+The 2 X 2 will be a target by prime interaction.
 
 ###Differences from Original Study
 
@@ -65,12 +62,14 @@ You can comment this section out prior to final report with data collection.
 #### Actual Sample
   Sample size:
   Demographics: 
-  Data exclusions: Data will be excluded if less than 50% correct.
+  Data exclusions: Data will be excluded if less than 50% correct and also we will only analyze data from people who indicated their race as White.
 
 #### Differences from pre-data collection methods plan
   Any differences from what was described as the original plan, or “none”.
 
 ##Results
+
+Original data: F(1, 62) = 17.21, p < .001
 
 
 ### Data preparation
@@ -188,9 +187,11 @@ length(unique(d$workerid))
 
 Start with a histogram, ALWAYS.
 ```{r}
-ggplot(d.raw, aes(x=rt)) + 
+ggplot(d, aes(x=rt)) + 
   geom_histogram() +
   facet_grid(workerid~.)
+
+summary(d) #examine rt outliers
 
 #### Prepare data for analysis - create columns etc.
 
@@ -204,7 +205,7 @@ ci95.norm <- function(x) {
 means <- d %>%
   filter(accuracy == 1) %>% # if you only want correct trials
   filter(!is.na(rt)) %>%
-  group_by(targetRace, toolType) %>%
+  group_by(workerid, targetRace, toolType) %>%
   summarise(m = mean(rt), ci.lo = ci95.norm(rt)[1], ci.hi = ci95.norm(rt)[2])
 
 limits = aes(ymax=ci.hi, ymin=ci.lo)
@@ -238,7 +239,7 @@ The analyses as specified in the analysis plan.
 Original paper did not include a graph.
 
 *exclusion criteria*
-Less than 50% correct.
+Less than 50% correct. non-White participants.
 
 ###Exploratory analyses
 
