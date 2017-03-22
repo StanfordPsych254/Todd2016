@@ -74,11 +74,11 @@ Difference in procedure is noted above. Instead of a lab study, this study will 
 ```{r include=F}
 ###Data Preparation
 ####Load Relevant Libraries and Functions
-
+#install.packages("ez")
 library(tidyverse)
 library(forcats)
 library(rjson)
-
+library(ez)
 
 ####Import data
 raw.data.path <- "~/Documents/Classes/Winter2017/PSYC254/Replication/Cosub/Todd2016/mturk/production-results/"
@@ -216,18 +216,12 @@ limits = aes(ymax=ci.hi, ymin=ci.lo)
 ### Confirmatory analysis
 
 ```{r}
-###PLOT
 ggplot(means, aes(x=targetRace, y=m, fill=toolType)) +
   geom_bar(stat="identity", position="dodge", width=.9) + 
   geom_errorbar(limits, position=position_dodge(width=.9), width=0.05) +
   theme_bw() +
   ggtitle("Weapon Identification Reaction Times") +
   labs(x = "Target race", y = "Mean reaction time (ms)")
-
-###ANALYSIS
-#install.packages("ez")
-library(ez)
-#d <- filter(d, !(is.na(d$rt)))
 
 aov <- ezANOVA(data = d.complete, dv = log_rt, wid = workerid, within = .(targetRace, toolType), detailed = TRUE)
 
