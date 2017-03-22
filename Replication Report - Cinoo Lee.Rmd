@@ -44,13 +44,15 @@ Instead of beginning with a blank screen (500 ms) like in the original article, 
 
 ###Analysis Plan
 
+"We decided a priori to exclude data from participants with below-chance accuracy (i.e., errors on > 50% of trials) on the weapon identification task.""
+
 "Before analysis, we excluded errors and RTs less than 100 ms. RTs exceeding
 the 500-ms deadline were excluded from analyses, and responses on those trials were treated as errors. We then subjected the remaining RTs to a log transformation (Payne, 2001); however, for interpretive ease, we report raw RTs.
 A 2 (race of prime: Black, White) × 2 (target object: gun, toy) repeated measures analysis of variance (ANOVA) revealed a significant interaction."
 
 The 2 X 2 will be a target by prime interaction.
 
-Data will be excluded if less than 50% correct and also we will only analyze data from people who indicated their race as White.
+We will only analyze data from people who indicated their race as White.
 
 ###Differences from Original Study
 
@@ -73,7 +75,6 @@ Difference in procedure is noted above. Instead of a lab study, this study will 
 ### Data preparation
 
 ```{r include = F}
-
 ####Load Relevant Libraries and Functions
 #install.packages("ez")
 library(tidyverse)
