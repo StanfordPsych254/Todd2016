@@ -144,8 +144,6 @@ d$Citizen = factor(d$Citizen)
 d$Gender = factor(d$Gender)
 d$Ethnicity = factor(d$Ethnicity)
 
-#finish the rest
-
 library(forcats)
 d$toolType = fct_recode(d$toolType,
                       "Toy" = "t",
@@ -203,10 +201,14 @@ ci95.norm <- function(x) {
 }
 
 means <- d %>%
-  filter(accuracy == 1) %>% # if you only want correct trials
+  filter(accuracy == 1) %>% #only want correct trials
+  filter(Ethnicity == "Caucasian/White") %>%
   filter(!is.na(rt)) %>%
   group_by(workerid, targetRace, toolType) %>%
-  summarise(m = mean(rt), ci.lo = ci95.norm(rt)[1], ci.hi = ci95.norm(rt)[2])
+  summarise(participant_mean = mean(rt) %>%
+  group_by(targetRace, toolType, add=FALSE) %>%
+  summarise(m = mean(participant_mean), ci.lo=ci95.norm(participant_mean)[1], ci.hi = ci95.norm(rt)[2])
+
 
 limits = aes(ymax=ci.hi, ymin=ci.lo)
 
