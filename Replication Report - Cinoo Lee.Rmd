@@ -214,7 +214,7 @@ means <- d %>%
 
 limits = aes(ymax=ci.hi, ymin=ci.lo)
 
-ggplot(means, aes(x=targetRace, y=m, fill=toolType)) +
+ggplot(means, aes(x=targetRace, y=participant_mean, fill=toolType)) +
   geom_bar(stat="identity", position="dodge", width=.9) + 
   geom_errorbar(limits, position=position_dodge(width=.9), width=0.05) +
   theme_bw() +
