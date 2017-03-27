@@ -12,7 +12,6 @@ output:
       collapsed: false
 ---
 
-<!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
 
 ##Introduction
 
@@ -59,9 +58,9 @@ Difference in procedure is noted above. Instead of a lab study, this study will 
 
 
 #### Actual Sample
-  Sample size:
+  Sample size: 37
   Demographics: 
-  Data exclusions: 
+  Data exclusions:
 
 #### Differences from pre-data collection methods plan
   None.
@@ -78,23 +77,27 @@ library(tidyverse)
 library(forcats)
 library(rjson)
 library(ez)
+library(forcats)
 
 ####Import data
 raw.data.path <- "~/Documents/Classes/Winter2017/PSYC254/Replication/Cosub/Todd2016/mturk/production-results/"
 
 files <- dir(raw.data.path,pattern="*.json")
+d.raw = NA
 d.raw <- data.frame()
+
 
 for (f in files) {
   jf <- paste0(raw.data.path,f)
   jd <- fromJSON(file=jf)
   
+
   id <- data.frame(workerid = jd$WorkerId, 
                    religAff = jd$answers$demographicsData[[1]]$ReligiousAffiliation,
                    religAtt = jd$answers$demographicsData[[1]]$ReligiousAttendance,
                    ses = jd$answers$demographicsData[[1]]$SES,
                    age = jd$answers$demographicsData[[1]]$Age,
-                   political = jd$answers$demographicsData[[1]]$Political,
+#                   political = jd$answers$demographicsData[[1]]$Political,
                    comments = jd$answers$demographicsData[[1]]$Comments,
                    Edu = jd$answers$demographicsData[[1]]$Education,
                    Citizen = jd$answers$demographicsData[[1]]$Citizen,
@@ -108,8 +111,8 @@ for (f in files) {
                    race = NA,
                    toolStim = NA,
                    responded = NA)
-    
-      for(i in 1:144) {
+
+for(i in 1:144) {
     id$rt[id$trial_num == i] <- jd$answers$data[[i]]$rt
     id$raceStim[id$trial_num == i] <- jd$answers$data[[i]]$raceStim
     id$toolType[id$trial_num == i] <- jd$answers$data[[i]]$tool
@@ -120,9 +123,10 @@ for (f in files) {
   }
   
     d.raw <- bind_rows(d.raw, id)
-    View(d.raw)
     
 }
+
+
 summary(d.raw)
 
 d <- d.raw %>%
@@ -139,7 +143,7 @@ d$Gender = factor(d$Gender)
 d$Ethnicity = factor(d$Ethnicity)
 
 ###Factoring and re-labeling
-library(forcats)
+
 d$toolType = fct_recode(d$toolType,
                       "Toy" = "t",
                         "Gun" = "g")
@@ -181,16 +185,32 @@ length(unique(d$workerid))
 ```{r}
 ###Exclusion 
 #Exclude non-White participants
-d <- d %>%
+d.white <- d %>%
   filter(Ethnicity == "Caucasian/White")
 
-#FIGURE OUT HOW TO filter out participants who have less than 50% accuracy
-assess_accuracy  <- d %>%
-  group_by(workerid) %>%
-  summarise(mean_accuracy = mean(accuracy))
+length(unique(d.white$workerid))
 
-d.complete <- d %>%
-   filter(!(is.na(d$rt)) & accuracy == 1 & rt > 100 &  rt <= 500) %>%
+#assess accuracy of people among those who have responded to the question
+assess_accuracy  <- d %>%
+  filter(responded==1) %>%
+  group_by(workerid) %>%
+summarise(mean_accuracy = mean(accuracy))
+
+#assess n of participants who are 50% accuracy or higher
+assess_accuracy  <- d %>%
+  filter(responded==1) %>%
+  group_by(workerid) %>%
+  summarise(mean_accuracy = mean(accuracy)) %>%
+  filter(mean_accuracy > 0.499)
+#this comes out to be 21 people for all ethnicity and 16 people for Whites.
+#adjusting the filter to 40% or higher makes everyone pass the bar.
+
+d.complete.all <- d %>%
+   filter(!(is.na(rt)) & accuracy == 1 & rt > 100 &  rt <= 500) %>%
+   mutate(log_rt = log(rt))
+
+d.complete.white <- d.white %>%
+  filter(!(is.na(rt)) & accuracy == 1 & rt > 100 &  rt <= 500) %>%
    mutate(log_rt = log(rt))
 ```
 
@@ -203,7 +223,15 @@ ci95.norm <- function(x) {
   c(mean(x)-me, mean(x)+me)
 }
 
-means <- d.complete %>%
+means.all <- d.complete.all %>%
+  filter(accuracy == 1) %>% #only want correct trials
+  filter(!is.na(rt)) %>%
+  group_by(workerid, targetRace, toolType) %>%
+  summarise(participant_mean = mean(rt)) %>%
+  group_by(targetRace, toolType, add=FALSE) %>%
+  summarise(m = mean(participant_mean), ci.lo=ci95.norm(participant_mean)[1], ci.hi = ci95.norm(participant_mean)[2])
+
+means.white <- d.complete.white %>%
   filter(accuracy == 1) %>% #only want correct trials
   filter(!is.na(rt)) %>%
   group_by(workerid, targetRace, toolType) %>%
@@ -217,21 +245,53 @@ limits = aes(ymax=ci.hi, ymin=ci.lo)
 ### Confirmatory analysis
 
 ```{r}
-ggplot(means, aes(x=targetRace, y=m, fill=toolType)) +
+ggplot(means.all, aes(x=targetRace, y=m, fill=toolType)) +
   geom_bar(stat="identity", position="dodge", width=.9) + 
   geom_errorbar(limits, position=position_dodge(width=.9), width=0.05) +
   theme_bw() +
-  ggtitle("Weapon Identification Reaction Times") +
+  ggtitle("Weapon Identification Reaction Times--All participants") +
   labs(x = "Target race", y = "Mean reaction time (ms)")
 
-aov <- ezANOVA(data = d.complete, dv = log_rt, wid = workerid, within = .(targetRace, toolType), detailed = TRUE)
+ggplot(means.white, aes(x=targetRace, y=m, fill=toolType)) +
+  geom_bar(stat="identity", position="dodge", width=.9) + 
+  geom_errorbar(limits, position=position_dodge(width=.9), width=0.05) +
+  theme_bw() +
+  ggtitle("Weapon Identification Reaction Times--White participants") +
+  labs(x = "Target race", y = "Mean reaction time (ms)")
 
-# CALC PARTIAL ETA SQUARED LATER
+means.aov <- d.complete.all %>%
+  filter(accuracy == 1) %>% #only want correct trials
+  filter(!is.na(log_rt)) %>%
+  group_by(workerid, targetRace, toolType) %>%
+  summarise(meanRT = mean(log_rt))
+
+aov <- with(means.aov, aov(meanRT ~ targetRace * toolType + Error(workerid/(targetRace * toolType))))
+
+# anova
+summary(means.aov)
+View(means.aov)
+
+# calculate PARTIAL ETA SQUARED
 ```
+summary(aov)
+
+#aov <- ezANOVA(data = d.complete.all, dv = log_rt, wid = workerid, within = .(targetRace, toolType), type = 2, detailed = TRUE)
 
 ###Exploratory analyses
 
-Any follow-up analyses desired (not required).  
+# lmer
+#refer
+jso_mss <- jso_final %>% 
+  filter(correct == 1) %>%
+  filter(cond != "ap") %>%
+  mutate(item = substr(leftPic, 1, nchar(leftPic)-1)) %>%
+  group_by(cond, subid, item) %>%
+  summarise(rt = mean(rt), na.rm = TRUE)
+
+jso_mss$cond <- as.factor(jso_mss$cond)
+jso_mss$cond <- relevel(jso_mss$cond, "ds")
+lmer <- lmer(rt ~ cond + (1 | subid) + (1 | item), data = jso_mss)
+summary(lmer)
 
 ## Discussion
 
@@ -242,4 +302,10 @@ Open the discussion section with a paragraph summarizing the primary result from
 
 ### Commentary
 
-Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+(a) insights from follow-up exploratory analysis
+
+(b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and 
+
+(c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+
+The original author commented on 1) The cover page of the study: "This task is investigating object recognition under distracting conditions. You will be asked to quickly identify objects will being distracted by other stimuli.", 2) Warning message: "It might be helpful for participants if you warn them that they'll see a message (an X) if they fail to respond quickly enough.", and 3) Deviation: Requiring participants to press the spacebar between trials is one of the only deviations from the original procedure. 
